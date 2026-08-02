@@ -5,12 +5,17 @@ from player.player import Player
 class Game(ShowBase):
     def __init__(self):
         super().__init__()
+
+        #systems
         self.input_manager = InputManager(self)
         self.player = Player(self)
-        #self.taskMgr.add(self.move, "Move")
 
-    #def move(self, task):
-        #if self.input_manager.is_key_pressed('w'):
-            #print("Moving forward")
+        self.taskMgr.add(self.update, "Update")
 
-        #return task.cont
+    def update(self, task):
+        
+        self.player.update()
+
+        return task.cont
+
+       
