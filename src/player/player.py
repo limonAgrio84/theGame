@@ -14,6 +14,13 @@ class Player:
         #velocidad
         self.speed = 5.0
 
+        #salto
+        self.vertical_velocity = 0.0
+        self.gravity = 20
+        self.jump_force = 8
+        self.is_grounded = True
+
+
 
         
 
@@ -21,6 +28,9 @@ class Player:
         dt = ClockObject.getGlobalClock().getDt()
 
         self.move(dt)
+        self.jump()
+
+        self.apply_gravity(dt)
 
         
 
@@ -53,3 +63,24 @@ class Player:
         #mover     
         movement = direction * self.speed * dt
         self.model.setPos(self.model.getPos() + movement)
+
+    def jump(self):
+        if self.game.input_manager.is_key_pressed("space"):
+            if self.is_grounded:
+                self.vertical_velocity = self.jump_force
+                self.is_grounded = False
+
+    def apply_gravity(self, dt):
+        self.vertical_velocity -= self.gravity * dt
+
+        z = self.model.getZ() 
+        z += self.vertical_velocity * dt
+
+        if z <= 0:
+            z = 0
+            self.vertical_velocity = 0
+            self.is_grounded = True
+
+        self.model.setZ(z)
+        
+        
